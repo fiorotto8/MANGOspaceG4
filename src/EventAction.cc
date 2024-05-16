@@ -1,10 +1,12 @@
 #include "EventAction.hh"
 #include "GasBoxSensitiveDetector.hh"
+#include "RunAction.hh"
 #include <G4SDManager.hh>
+#include <G4AnalysisManager.hh>
 #include <map>
 #include <vector>
 #include <string>
-
+#include <G4Event.hh>
 
 EventAction::EventAction() : G4UserEventAction() {
     // Constructor implementation
@@ -19,21 +21,29 @@ void EventAction::BeginOfEventAction(const G4Event*) {
 }
 
 void EventAction::EndOfEventAction(const G4Event* event) {
+    G4int evtNb = event->GetEventID(); 
+    if(evtNb%10000==0){
+        G4cout << evtNb << G4endl;
+    }
+
     G4SDManager* SDManager = G4SDManager::GetSDMpointer();
     GasBoxSensitiveDetector* gasBoxSD = static_cast<GasBoxSensitiveDetector*>(SDManager->FindSensitiveDetector("GasBoxSD"));
+    // Get the instance of the run manager
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
 
 
     if (gasBoxSD) {
-        //PRIMRIES
-        BoolArrived.push_back(gasBoxSD->HasParticleArrived());
-        BoolInteracted.push_back(gasBoxSD->HasParticleInteracted());
-        totalPrimaryEnergyDeposit.push_back(gasBoxSD->GetTotPrimEnergyDeposit());
-        primaryEnergy.push_back(gasBoxSD->GetPrimaryEnergy());
-        primaryPDG.push_back(gasBoxSD->GetPDGPrimary());
-        //Secondaries
-        numSecondaries.push_back(gasBoxSD->GetNumSecondaries());
-        // Create an instance of the custom class
-        std::vector<std::vector<int>> secondariesPDG;
-        secondariesPDG.push_back(gasBoxSD->GetPDGSecondaries());
+
+    analysisManager->FillNtupleIColumn(0,gasBoxSD->HasParticleArrived());
+    analysisManager->FillNtupleIColumn(1,gasBoxSD->HasParticleInteracted());
+    analysisManager->FillNtupleDColumn(2,gasBoxSD->GetTotPrimEnergyDeposit());
+    analysisManager->FillNtupleDColumn(3,gasBoxSD->GetPrimaryEnergy());
+    analysisManager->FillNtupleIColumn(4,gasBoxSD->GetPDGPrimary());
+    analysisManager->FillNtupleIColumn(5,gasBoxSD->GetPrimaryHits());
+    analysisManager->FillNtupleIColumn(6,gasBoxSD->GetSecondaryHits());
+    analysisManager->AddNtupleRow(0);
+
     }
+
 }

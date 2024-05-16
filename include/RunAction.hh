@@ -10,7 +10,7 @@ class RunAction : public G4UserRunAction {
 public:
     RunAction(EventAction* eventAction);
     virtual ~RunAction();
-
+    TTree* GetTree(){return tree;};
     virtual void BeginOfRunAction(const G4Run*) override;
     virtual void EndOfRunAction(const G4Run*) override;
 

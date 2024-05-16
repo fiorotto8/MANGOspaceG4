@@ -1,5 +1,4 @@
 #include "PhysicsList.hh"
-
 #include <G4EmStandardPhysics.hh>
 #include <G4EmExtraPhysics.hh>
 #include <G4HadronElasticPhysics.hh>
@@ -29,7 +28,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   //hadronic
   RegisterPhysics( new G4HadronElasticPhysicsHP(1) );
   //better low energy EM and polarization
-  //RegisterPhysics(new G4EmLivermorePolarizedPhysics());
+  RegisterPhysics(new G4EmLivermorePolarizedPhysics());
 
   // Em options
   G4EmParameters* emPar = G4EmParameters::Instance();

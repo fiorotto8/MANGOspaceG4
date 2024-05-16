@@ -24,14 +24,13 @@ public:
     G4double GetTotPrimEnergyDeposit() const { return totalPrimaryEnergyDeposit; }
     G4double GetPrimaryEnergy() const { return primaryEnergy; }
     G4int GetPDGPrimary() const { return primaryPDG; }
+    G4int GetPrimaryHits() const { return primaryHits; }
     //methods to access secondary info
-    G4int GetNumSecondaries() const { return numSecondaries; }
-    std::vector<int> GetPDGSecondaries() const {return secondariesPDG;}
+    G4int GetSecondaryHits() const { return secondaryHits; }
 
     // Reset method for the event
     void ResetForNewEvent();
     // Getters for the secondary count and types
-
 
 private:
 //Primaries
@@ -40,9 +39,9 @@ private:
     G4double totalPrimaryEnergyDeposit;
     G4double primaryEnergy;
     G4int primaryPDG;
+    G4int primaryHits;
 //Secondaries
-    G4int numSecondaries;
-    std::vector<int> secondariesPDG;
+    G4int secondaryHits;
 };
 
 #endif // GasBoxSensitiveDetector_h

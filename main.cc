@@ -5,16 +5,8 @@
 #include <G4String.hh>
 #include <G4UImanager.hh>
 #include "ActionInitialization.hh"
-
-// Task 1: See that we need to include the proper header
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-
-// Task 3b.4: Include (temporarily if you want) header for QGSP
-
-// Task 4b.1: Include the proper header to enable scoring manager
-
-// Task 4c.3: Include the proper header to enable analysis tools
 
 using namespace std;
 
@@ -63,7 +55,6 @@ int main(int argc, char** argv)
   // Register PhysicsList to the RunManager
   runManager->SetUserInitialization(new PhysicsList());
 
-  // Task 1: See that we instantiate the detector construction here
   runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(new ActionInitialization());//PrimaryGeneratorAction is instantiated in ActionInitialization
 
@@ -74,8 +65,6 @@ int main(int argc, char** argv)
       ui = new G4UIExecutive(argc, argv);
     }
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-  // Task 4b.1: You need to access the scoring manager here (or above)
 
   for (auto macro : macros)
     {
@@ -98,10 +87,6 @@ int main(int argc, char** argv)
     }
 
   delete runManager;
-
-  // Task 4c.3: Close the analysis output by uncommmenting the following lines
-  // G4AnalysisManager* man = G4AnalysisManager::Instance();
-  // man->CloseFile();
 
   G4cout << "Application successfully ended.\nBye :-)" << G4endl;
 

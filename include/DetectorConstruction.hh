@@ -35,6 +35,7 @@ private:
     G4double openSideThickness;
     G4double He_frac;
     G4double CF4_frac;
+    G4double Ar_frac;
     G4double gasThickness;
     G4double gasWidth;
     G4double gasHeight;

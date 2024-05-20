@@ -27,9 +27,9 @@ DetectorConstruction::DetectorConstruction()
   detThickness(12.*cm),//detectorBoxThickness
   openSideThickness(1*cm),// Thickness of the open side
   //GAS volume
-  He_frac(0.4),
-  CF4_frac(0.6),
-  Ar_frac(0.),
+  He_frac(0.),
+  CF4_frac(0.4),
+  Ar_frac(0.6),
   gasThickness(10.*cm),
   gasWidth(10.*cm),
   gasHeight(10.*cm)
@@ -256,22 +256,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     CF4_gas->AddElement(elC, 1);
     CF4_gas->AddElement(elF, 4);
 
-
-    //!HeCF4
-    density = He_gas->GetDensity()+CF4_gas->GetDensity();
-    pressure = He_gas->GetPressure()+CF4_gas->GetPressure();
     auto CYGNO_gas = new G4Material("CYGNO_gas", density, 2, kStateGas, temperature, pressure);
-    CYGNO_gas->AddMaterial(He_gas, He_gas->GetDensity()/density*100*perCent);
-    CYGNO_gas->AddMaterial(CF4_gas,  CF4_gas->GetDensity()/density*100*perCent);
 
-    //!ArCF4
-    /*
-    density = Ar_gas->GetDensity()+CF4_gas->GetDensity();
-    pressure = Ar_gas->GetPressure()+CF4_gas->GetPressure();
-    auto CYGNO_gas = new G4Material("CYGNO_gas", density, 2, kStateGas, temperature, pressure);
-    CYGNO_gas->AddMaterial(Ar_gas, Ar_gas->GetDensity()/density*100*perCent);
-    CYGNO_gas->AddMaterial(CF4_gas,  CF4_gas->GetDensity()/density*100*perCent);
-  */
+    if (Ar_frac==0){
+      //!HeCF4
+      density = He_gas->GetDensity()+CF4_gas->GetDensity();
+      pressure = He_gas->GetPressure()+CF4_gas->GetPressure();
+      CYGNO_gas->AddMaterial(He_gas, He_gas->GetDensity()/density*100*perCent);
+      CYGNO_gas->AddMaterial(CF4_gas,  CF4_gas->GetDensity()/density*100*perCent);
+    }
+    else{
+      //!ArCF4
+      density = Ar_gas->GetDensity()+CF4_gas->GetDensity();
+      pressure = Ar_gas->GetPressure()+CF4_gas->GetPressure();
+      CYGNO_gas->AddMaterial(Ar_gas, Ar_gas->GetDensity()/density*100*perCent);
+      CYGNO_gas->AddMaterial(CF4_gas,  CF4_gas->GetDensity()/density*100*perCent);
+    }
 
   //
   // gas volume

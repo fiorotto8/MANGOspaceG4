@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 
 parser = argparse.ArgumentParser(description="Obtain efficiency to photons from Geant4.")
+parser.add_argument("gas", help="Gases Concentrations He CF4 Ar",nargs=3, type=int)
 parser.add_argument("--infile", help="root file from Geant4",default="../build/output.root")
-parser.add_argument("--outfile", help="Output ROOT file to write",default="efficiency_He6040.root")
 args = parser.parse_args()
 
 def create_and_fill_histogram(df, column_name, bin_edges,name):
@@ -54,7 +54,7 @@ def create_ratio_graph(genHist, intHist):
     #graph = ROOT.TGraphErrors(n_bins, x*1000, y, ex, ey)
     #graph.Write()
     return x*1000, y, ex*1000, ey
-def style_and_draw_graph(graph, canvas_name="EfficiencyPhotoelectric",color=ROOT.kRed - 4):
+def style_and_draw_graph(graph, gas="HeCF_{4} 60/40",color=ROOT.kRed - 4):
     # Apply styles to the graph
     graph.SetNameTitle("Efficiency plot", "")
     graph.GetXaxis().SetTitle("Energy (keV)")
@@ -63,8 +63,9 @@ def style_and_draw_graph(graph, canvas_name="EfficiencyPhotoelectric",color=ROOT
     graph.SetLineColor(color)
     graph.SetMarkerStyle(8)
     graph.SetMarkerSize(2)
+    graph.Write()
     # Create a canvas
-    canvas = ROOT.TCanvas(canvas_name, canvas_name, 1000, 1000)
+    canvas = ROOT.TCanvas("EfficiencyPhotoelectric", "EfficiencyPhotoelectric", 1000, 1000)
     canvas.SetLeftMargin(0.15)
     canvas.SetRightMargin(0.05)
     canvas.SetTopMargin(0.05)
@@ -73,11 +74,12 @@ def style_and_draw_graph(graph, canvas_name="EfficiencyPhotoelectric",color=ROOT
     # Draw the graph on the canvas
     graph.Draw("AP")  # "A" for axis, "P" for points
     # Set the y-axis range
-    graph.GetYaxis().SetRangeUser(1e-5, 1e-1)
+    #graph.GetYaxis().SetRangeUser(1e-3, 1e-0)
+    graph.GetYaxis().SetRangeUser(1e-4, 1e-1)
     # Create and draw TPaveText
     pave_text = ROOT.TPaveText(0.65, 0.8, 0.8, 0.95, "NDC")
     pave_text.AddText("Gas cube with 10cm side")
-    pave_text.AddText("He/CF_{4} at 1atm")
+    pave_text.AddText(f"{gas} at 1atm")
     pave_text.SetFillColor(0)  # Transparent fill
     pave_text.SetFillStyle(0)  # Transparent fill style
     pave_text.SetBorderSize(0)  # No border
@@ -88,13 +90,22 @@ def style_and_draw_graph(graph, canvas_name="EfficiencyPhotoelectric",color=ROOT
     # Update the canvas to display the graph
     canvas.Update()
     # Save the canvas if needed
-    canvas.SaveAs(f"{canvas_name}.png")
+    string=gas.replace("/", "_").replace(" ", "").replace("_", "").translate({ord("{"): None, ord("}"): None})
+    canvas.SaveAs(f"EfficiencyPhotoelectric_{string}.png")
     canvas.Write()
     return canvas
 # Open the ROOT file and access the TTree
 file = uproot.open(args.infile)
 tree = file['tree']
 
+if args.gas[0]!=0:
+    outfile=f"efficiency_He{args.gas[0]}{args.gas[1]}.root"
+    name=f"HeCF_{{4}} {args.gas[0]}/{args.gas[1]}"
+else:
+    outfile=f"efficiency_Ar{args.gas[2]}{args.gas[1]}.root"
+    name=f"ArCF_{{4}} {args.gas[2]}/{args.gas[1]}"
+
+print("Opening TTree...")
 # Convert the TTree into a pandas DataFrame
 df = tree.arrays(library="pd")
 #print(df)
@@ -107,6 +118,7 @@ energies=np.linspace(0.01,0.07,100)
 epsilon=0.0002#200eV
 condition=(df["BoolInteracted"]==1) & (df["primaryHits"]==1 ) & (df["energyDeposit"]>df["primaryEnergy"]-epsilon)& (df["energyDeposit"]<=df["primaryEnergy"])
 
+print("Cutting TTree...")
 filtered_df = df[condition]
 
 genHist=create_and_fill_histogram(df,"primaryEnergy",energies,"Generated Energies")
@@ -122,14 +134,15 @@ data = {
 }
 df_eff = pd.DataFrame(data)
 
+print("Writing TTrees...")
 # Write the filtered DataFrame to a new ROOT file
-with uproot.recreate(args.outfile) as new_file:
+with uproot.recreate(outfile) as new_file:
     new_file["cuttree"] = filtered_df
     new_file["OGtree"] = df
     new_file["efficiency"] = df_eff
 
-main = ROOT.TFile(args.outfile, "UPDATE")
+main = ROOT.TFile(outfile, "UPDATE")
 
 genHist.Write()
 intHist.Write()
-style_and_draw_graph(ROOT.TGraphErrors(len(energy), energy, efficiency, err_energy, err_efficiency))
+style_and_draw_graph(ROOT.TGraphErrors(len(energy), energy, efficiency, err_energy, err_efficiency),gas=name)

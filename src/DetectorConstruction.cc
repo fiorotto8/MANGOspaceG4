@@ -28,8 +28,8 @@ DetectorConstruction::DetectorConstruction()
   openSideThickness(1*cm),// Thickness of the open side
   //GAS volume
   He_frac(0.),
-  CF4_frac(0.4),
-  Ar_frac(0.6),
+  CF4_frac(0.2),
+  Ar_frac(0.8),
   gasThickness(10.*cm),
   gasWidth(10.*cm),
   gasHeight(10.*cm)

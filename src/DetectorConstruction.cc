@@ -286,7 +286,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //Colorize the logic using proper vis. attributes
     auto logicGasBoxVis = new G4VisAttributes(G4Colour::Blue());
     logicGasBoxVis->SetVisibility(true);
-    logicGasBoxVis->SetForceSolid(false);
+    logicGasBoxVis->SetForceSolid(true);
     logicGasBox->SetVisAttributes(logicGasBoxVis);
 
   new G4PVPlacement(nullptr,  // no rotation

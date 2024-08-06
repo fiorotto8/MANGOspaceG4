@@ -74,7 +74,7 @@ def style_and_draw_graph(graph, gas="HeCF_{4} 60/40",color=ROOT.kRed - 4):
     # Draw the graph on the canvas
     graph.Draw("AP")  # "A" for axis, "P" for points
     # Set the y-axis range
-    if args.gas[0]==0: graph.GetYaxis().SetRangeUser(1e-3, 1e-0)
+    if args.gas[0]==0: graph.GetYaxis().SetRangeUser(1e-4, 1e-0)
     else: graph.GetYaxis().SetRangeUser(1e-4, 1e-1)
     # Create and draw TPaveText
     pave_text = ROOT.TPaveText(0.65, 0.8, 0.8, 0.95, "NDC")

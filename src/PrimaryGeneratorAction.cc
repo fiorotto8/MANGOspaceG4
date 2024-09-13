@@ -57,8 +57,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     energyDist->SetGradient(.0);  // Corresponds to /gps/ene/gradient 1
     energyDist->SetInterCept(1.0 );  // Corresponds to /gps/ene/intercept 1 keV
     // Set the minimum and maximum energy
-    energyDist->SetEmin(10.0 * keV);  // Minimum energy
-    energyDist->SetEmax(70.0 * keV);  // Maximum energy
+    energyDist->SetEmin(1.0 * keV);  // Minimum energy
+    energyDist->SetEmax(10.0 * keV);  // Maximum energy
 
     // Custom energy distribution from Nustar
     /*

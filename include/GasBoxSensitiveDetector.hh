@@ -15,9 +15,7 @@ public:
     virtual ~GasBoxSensitiveDetector();
 
     // Mandatory methods
-    virtual void Initialize(G4HCofThisEvent* HCE) override;
     virtual G4bool ProcessHits(G4Step* step, G4TouchableHistory* ROhist) override;
-    virtual void EndOfEvent(G4HCofThisEvent* HCE) override;
     // Methods to a access primaries info
     G4bool HasParticleArrived() const { return BoolArrived; }
     G4bool HasParticleInteracted() const { return BoolInteracted; }

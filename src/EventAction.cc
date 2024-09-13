@@ -30,20 +30,4 @@ void EventAction::EndOfEventAction(const G4Event* event) {
     GasBoxSensitiveDetector* gasBoxSD = static_cast<GasBoxSensitiveDetector*>(SDManager->FindSensitiveDetector("GasBoxSD"));
     // Get the instance of the run manager
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-
-
-
-    if (gasBoxSD) {
-
-    analysisManager->FillNtupleIColumn(0,gasBoxSD->HasParticleArrived());
-    analysisManager->FillNtupleIColumn(1,gasBoxSD->HasParticleInteracted());
-    analysisManager->FillNtupleDColumn(2,gasBoxSD->GetTotPrimEnergyDeposit());
-    analysisManager->FillNtupleDColumn(3,gasBoxSD->GetPrimaryEnergy());
-    analysisManager->FillNtupleIColumn(4,gasBoxSD->GetPDGPrimary());
-    analysisManager->FillNtupleIColumn(5,gasBoxSD->GetPrimaryHits());
-    analysisManager->FillNtupleIColumn(6,gasBoxSD->GetSecondaryHits());
-    analysisManager->AddNtupleRow(0);
-
-    }
-
 }

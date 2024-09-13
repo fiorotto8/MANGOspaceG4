@@ -15,14 +15,29 @@ void RunAction::BeginOfRunAction(const G4Run*) {
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     analysisManager->OpenFile("output.root");
 
-    analysisManager->CreateNtuple("tree","tree");
-    analysisManager->CreateNtupleIColumn("BoolArrived");
-    analysisManager->CreateNtupleIColumn("BoolInteracted");
-    analysisManager->CreateNtupleDColumn("energyDeposit");
-    analysisManager->CreateNtupleDColumn("primaryEnergy");
-    analysisManager->CreateNtupleIColumn("primaryPDG");
-    analysisManager->CreateNtupleIColumn("primaryHits");
-    analysisManager->CreateNtupleIColumn("secondaryHits");
+    analysisManager->CreateNtuple("nTuple","nTuple");
+    analysisManager->CreateNtupleIColumn("EventNumber");
+    analysisManager->CreateNtupleSColumn("ParticleName");
+    analysisManager->CreateNtupleIColumn("ParticleID");
+    analysisManager->CreateNtupleIColumn("ParticleTag");
+    analysisManager->CreateNtupleIColumn("ParentID");
+    analysisManager->CreateNtupleDColumn("x_hits");
+    analysisManager->CreateNtupleDColumn("y_hits");
+    analysisManager->CreateNtupleDColumn("z_hits");
+    analysisManager->CreateNtupleDColumn("EnergyDeposit");
+    analysisManager->CreateNtupleIColumn("VolumeNumber");
+    analysisManager->CreateNtupleDColumn("VolumeTraslX");
+    analysisManager->CreateNtupleDColumn("VolumeTraslY");
+    analysisManager->CreateNtupleDColumn("VolumeTraslZ");
+    analysisManager->CreateNtupleSColumn("ProcessType");
+    analysisManager->CreateNtupleDColumn("px_particle");
+    analysisManager->CreateNtupleDColumn("py_particle");
+    analysisManager->CreateNtupleDColumn("pz_particle");
+    analysisManager->CreateNtupleIColumn("pdgID_hits");
+    analysisManager->CreateNtupleDColumn("tracklen_hits");
+    analysisManager->CreateNtupleIColumn("currentTrackID");//trackID for later
+    analysisManager->CreateNtupleDColumn("EnergyInitial");//trackID for later
+
 
     analysisManager->FinishNtuple(0);
 

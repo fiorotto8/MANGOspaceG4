@@ -27,9 +27,9 @@ DetectorConstruction::DetectorConstruction()
   detThickness(12.*cm),//detectorBoxThickness
   openSideThickness(1*cm),// Thickness of the open side
   //GAS volume
-  He_frac(0.),
-  CF4_frac(0.2),
-  Ar_frac(0.8),
+  He_frac(0.6),
+  CF4_frac(0.4),
+  Ar_frac(0.),
   gasThickness(10.*cm),
   gasWidth(10.*cm),
   gasHeight(10.*cm)
@@ -228,50 +228,50 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   //GAS CREATION
 
-    G4double massOfMole = 1.008*g/mole;
-    G4double temperature = 293*kelvin;
-    G4double pressure = 1*atmosphere; //this will be modified
-    G4double density = 1000*g/m3; //this will be modified
+  G4double massOfMole = 1.008*g/mole;
+  G4double temperature = 293*kelvin;
+  G4double pressure = 1*atmosphere; //this will be modified
+  G4double density = 1000*g/m3; //this will be modified
 
-    //He_gas
-    G4Element* elHe = nist->FindOrBuildElement("He");
-    density = 162.488*He_frac*g/m3;
-    pressure = 1*He_frac*atmosphere;
-    auto He_gas = new G4Material("He_gas", density, 1, kStateGas, temperature,pressure);
-    He_gas->AddElement(elHe, 1);
+  //He_gas
+  G4Element* elHe = nist->FindOrBuildElement("He");
+  density = 162.488*He_frac*g/m3;
+  pressure = 1*He_frac*atmosphere;
+  auto He_gas = new G4Material("He_gas", density, 1, kStateGas, temperature,pressure);
+  He_gas->AddElement(elHe, 1);
 
-    //Ar_gas
-    G4Element* elAr = nist->FindOrBuildElement("Ar");
-    density = 5.704*Ar_frac*kg/m3;
-    pressure = 1*Ar_frac*atmosphere;
-    auto Ar_gas = new G4Material("Ar_gas", density, 1, kStateGas, temperature,pressure);
-    Ar_gas->AddElement(elAr, 1);
+  //Ar_gas
+  G4Element* elAr = nist->FindOrBuildElement("Ar");
+  density = 5.704*Ar_frac*kg/m3;
+  pressure = 1*Ar_frac*atmosphere;
+  auto Ar_gas = new G4Material("Ar_gas", density, 1, kStateGas, temperature,pressure);
+  Ar_gas->AddElement(elAr, 1);
 
-    //CF4_gas
-    G4Element* elC  = nist->FindOrBuildElement("C");
-    G4Element* elF = nist->FindOrBuildElement("F");
-    density = 3574.736*CF4_frac*g/m3;
-    pressure = 1*CF4_frac*atmosphere;
-    auto CF4_gas = new G4Material("CF4_gas", density, 2, kStateGas, temperature, pressure);
-    CF4_gas->AddElement(elC, 1);
-    CF4_gas->AddElement(elF, 4);
+  //CF4_gas
+  G4Element* elC  = nist->FindOrBuildElement("C");
+  G4Element* elF = nist->FindOrBuildElement("F");
+  density = 3574.736*CF4_frac*g/m3;
+  pressure = 1*CF4_frac*atmosphere;
+  auto CF4_gas = new G4Material("CF4_gas", density, 2, kStateGas, temperature, pressure);
+  CF4_gas->AddElement(elC, 1);
+  CF4_gas->AddElement(elF, 4);
 
-    auto CYGNO_gas = new G4Material("CYGNO_gas", density, 2, kStateGas, temperature, pressure);
+  auto CYGNO_gas = new G4Material("CYGNO_gas", density, 2, kStateGas, temperature, pressure);
 
-    if (Ar_frac==0){
-      //!HeCF4
-      density = He_gas->GetDensity()+CF4_gas->GetDensity();
-      pressure = He_gas->GetPressure()+CF4_gas->GetPressure();
-      CYGNO_gas->AddMaterial(He_gas, He_gas->GetDensity()/density*100*perCent);
-      CYGNO_gas->AddMaterial(CF4_gas,  CF4_gas->GetDensity()/density*100*perCent);
-    }
-    else{
-      //!ArCF4
-      density = Ar_gas->GetDensity()+CF4_gas->GetDensity();
-      pressure = Ar_gas->GetPressure()+CF4_gas->GetPressure();
-      CYGNO_gas->AddMaterial(Ar_gas, Ar_gas->GetDensity()/density*100*perCent);
-      CYGNO_gas->AddMaterial(CF4_gas,  CF4_gas->GetDensity()/density*100*perCent);
-    }
+  if (Ar_frac==0){
+    //!HeCF4
+    density = He_gas->GetDensity()+CF4_gas->GetDensity();
+    pressure = He_gas->GetPressure()+CF4_gas->GetPressure();
+    CYGNO_gas->AddMaterial(He_gas, He_gas->GetDensity()/density*100*perCent);
+    CYGNO_gas->AddMaterial(CF4_gas,  CF4_gas->GetDensity()/density*100*perCent);
+  }
+  else{
+    //!ArCF4
+    density = Ar_gas->GetDensity()+CF4_gas->GetDensity();
+    pressure = Ar_gas->GetPressure()+CF4_gas->GetPressure();
+    CYGNO_gas->AddMaterial(Ar_gas, Ar_gas->GetDensity()/density*100*perCent);
+    CYGNO_gas->AddMaterial(CF4_gas,  CF4_gas->GetDensity()/density*100*perCent);
+  }
 
   //
   // gas volume

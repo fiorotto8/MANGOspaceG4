@@ -70,29 +70,35 @@ G4bool GasBoxSensitiveDetector::ProcessHits(G4Step * aStep, G4TouchableHistory* 
 
     G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance(); 
 
-    AnalysisManager->FillNtupleIColumn(0,evt);
-    AnalysisManager->FillNtupleSColumn(1,particleName);
-    AnalysisManager->FillNtupleIColumn(2,particleID);
-    AnalysisManager->FillNtupleIColumn(3,particleTag);
-    AnalysisManager->FillNtupleIColumn(4,particleParentID);
-    AnalysisManager->FillNtupleDColumn(5,posParticle[0]);
-    AnalysisManager->FillNtupleDColumn(6,posParticle[1]);
-    AnalysisManager->FillNtupleDColumn(7,posParticle[2]);
-    AnalysisManager->FillNtupleDColumn(8,EdepStep);
-    AnalysisManager->FillNtupleIColumn(9,VolumeCopyNumber);
-    AnalysisManager->FillNtupleDColumn(10,TranslationVolVec[0]);
-    AnalysisManager->FillNtupleDColumn(11,TranslationVolVec[1]);
-    AnalysisManager->FillNtupleDColumn(12,TranslationVolVec[2]);
-    AnalysisManager->FillNtupleSColumn(13,ProcessType);   
-    AnalysisManager->FillNtupleDColumn(14,momentumDirection[0]);//px_particle
-    AnalysisManager->FillNtupleDColumn(15,momentumDirection[1]);//py_particle
-    AnalysisManager->FillNtupleDColumn(16,momentumDirection[2]);//pz_particle
-    AnalysisManager->FillNtupleIColumn(17,pdgID);//pdg_id
-    AnalysisManager->FillNtupleDColumn(18,stepLength);//lunghezza step
-    AnalysisManager->FillNtupleIColumn(19,currentTrackID);//track ID for track distrimination
-    AnalysisManager->FillNtupleDColumn(20,initialEnergy);//Initial energy of the particle
+    //TrackID is unique and counts the number of tracks generated in the simulation
+    //ParentID is the ID of the parent track that generated the current track 
+        //i.e. points directly to the track that generated the current track
 
-    AnalysisManager->AddNtupleRow(0);
+    if (particleName == "e-"){
 
+        AnalysisManager->FillNtupleIColumn(0,evt);
+        AnalysisManager->FillNtupleSColumn(1,particleName);
+        AnalysisManager->FillNtupleIColumn(2,particleID);
+        AnalysisManager->FillNtupleIColumn(3,particleTag);
+        AnalysisManager->FillNtupleIColumn(4,particleParentID);
+        AnalysisManager->FillNtupleDColumn(5,posParticle[0]);
+        AnalysisManager->FillNtupleDColumn(6,posParticle[1]);
+        AnalysisManager->FillNtupleDColumn(7,posParticle[2]);
+        AnalysisManager->FillNtupleDColumn(8,EdepStep);
+        AnalysisManager->FillNtupleIColumn(9,VolumeCopyNumber);
+        AnalysisManager->FillNtupleDColumn(10,TranslationVolVec[0]);
+        AnalysisManager->FillNtupleDColumn(11,TranslationVolVec[1]);
+        AnalysisManager->FillNtupleDColumn(12,TranslationVolVec[2]);
+        AnalysisManager->FillNtupleSColumn(13,ProcessType);   
+        AnalysisManager->FillNtupleDColumn(14,momentumDirection[0]);//px_particle
+        AnalysisManager->FillNtupleDColumn(15,momentumDirection[1]);//py_particle
+        AnalysisManager->FillNtupleDColumn(16,momentumDirection[2]);//pz_particle
+        AnalysisManager->FillNtupleIColumn(17,pdgID);//pdg_id
+        AnalysisManager->FillNtupleDColumn(18,stepLength);//lunghezza step
+        AnalysisManager->FillNtupleIColumn(19,currentTrackID);//track ID for track distrimination
+        AnalysisManager->FillNtupleDColumn(20,initialEnergy);//Initial energy of the particle
+
+        AnalysisManager->AddNtupleRow(0);
+    }
     return true;
 }

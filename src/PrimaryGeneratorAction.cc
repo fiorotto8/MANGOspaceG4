@@ -24,18 +24,20 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
     // Instantiate a GPS
     fGPS = new G4GeneralParticleSource();
-    G4double holeDiameter = 10.5 * mm;  // Circular hole diameter
+    G4double holeDiameter = 70 * mm;  // Circular hole diameter
 
     // Set the basic properties for the particles to be produced
     G4ParticleDefinition* gamma = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
     fGPS->SetParticleDefinition(gamma);
 
+    /*
+    //! eneregy and spatial distribution
     // Configure the position distribution
     G4SPSPosDistribution* positionDist = fGPS->GetCurrentSource()->GetPosDist();
     positionDist->SetPosDisType("Plane");  // Set to emit from a plane
     positionDist->SetPosDisShape("Circle");  // The shape of the plane is circular
     positionDist->SetRadius(holeDiameter / 2);  // Half the diameter for the radius
-    positionDist->SetCentreCoords(G4ThreeVector(20 * cm, 0, 0));  // Center of the disk at (20, 0, 0) cm
+    positionDist->SetCentreCoords(G4ThreeVector(-20 * cm, 0, 0));  // Center of the disk at (20, 0, 0) cm
     positionDist->SetPosRot1(G4ThreeVector(0, 1, 0));  // Alignment vector along y-axis
     positionDist->SetPosRot2(G4ThreeVector(0, 0, 1));  // Alignment vector along z-axis
 
@@ -44,8 +46,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     angularDist->SetAngDistType("iso");
     angularDist->DefineAngRefAxes("angref1", G4ThreeVector(0, 0, 1));  // Reference axis along +z
     // Set theta at 90 degrees to align with +x, and phi at 0 degrees
-    angularDist->SetMinTheta(180 * deg);  // Theta at 90 degrees
-    angularDist->SetMaxTheta(180 * deg);  // No spread in Theta
+    angularDist->SetMinTheta(0 * deg);  // Theta at 90 degrees
+    angularDist->SetMaxTheta(0 * deg);  // No spread in Theta
     angularDist->SetMinPhi(90 * deg);     // Phi at 0 degrees
     angularDist->SetMaxPhi(90 * deg);
 
@@ -57,10 +59,30 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     energyDist->SetGradient(.0);  // Corresponds to /gps/ene/gradient 1
     energyDist->SetInterCept(1.0 );  // Corresponds to /gps/ene/intercept 1 keV
     // Set the minimum and maximum energy
-    energyDist->SetEmin(1.0 * keV);  // Minimum energy
-    energyDist->SetEmax(10.0 * keV);  // Maximum energy
+    energyDist->SetEmin(10.0 * keV);  // Minimum energy
+    energyDist->SetEmax(100.0 * keV);  // Maximum energy
+    */
 
-    // Custom energy distribution from Nustar
+    //! single energy radom spatial distribution
+    // Set the energy to 17.45 keV
+    fGPS->GetCurrentSource()->GetEneDist()->SetMonoEnergy(17.45 * keV);
+    
+    // Set the direction to (0, 1, 0)
+    fGPS->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
+    
+    // Set the spatial distribution on a circle of diameter 70 cm
+    G4double radius = 35 * mm;  // Radius of the circle
+    fGPS->GetCurrentSource()->GetPosDist()->SetPosDisType("Plane");
+    fGPS->GetCurrentSource()->GetPosDist()->SetPosDisShape("Circle");
+    fGPS->GetCurrentSource()->GetPosDist()->SetRadius(radius);
+    fGPS->GetCurrentSource()->GetPosDist()->SetCentreCoords(G4ThreeVector(-100., 0., 0.));
+    fGPS->GetCurrentSource()->GetPosDist()->SetPosRot1(G4ThreeVector(0., 1., 0.)); // Circle lies in the X-Z plane
+    fGPS->GetCurrentSource()->GetPosDist()->SetPosRot2(G4ThreeVector(0., 0., 1.)); // Circle lies in the X-Z plane
+
+    // Set linear polarization along the Y-axis (1, 0, 0)
+    fGPS->GetCurrentSource()->SetParticlePolarization(G4ThreeVector(0., 1., 0.));
+
+    //! Custom energy distribution from Nustar
     /*
     fGPS->GetCurrentSource()->GetEneDist()->SetEnergyDisType("Arb");
     fGPS->GetCurrentSource()->GetEneDist()->ArbEnergyHistoFile("CRAB_NuStar.dat");
@@ -113,8 +135,5 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    // Task 2a.2: Include the position randomization
-    // Task 2b.1: Comment out all previous commands in this method (there is no fGun!)
-    // Task 2b.1: The method for vertex creation remains the same,.just change the object to your GPS
     fGPS->GeneratePrimaryVertex(anEvent);
 }

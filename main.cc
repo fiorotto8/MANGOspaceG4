@@ -22,70 +22,78 @@ int main(int argc, char** argv)
   G4bool interactive = false;
 
   // Parse command line arguments
-  if  (argc == 1)
-    {
-      interactive = true;
-    }
+  if (argc == 1)
+  {
+    interactive = true;
+  }
   else
+  {
+    for (int i = 1; i < argc; i++)
     {
-      for (int i = 1; i < argc; i++)
-        {
-          G4String arg = argv[i];
-          if (arg == "-i" || arg == "--interactive")
-            {
-              interactive = true;
-              continue;
-            }
-            else
-            {
-              macros.push_back(arg);
-            }
-        }
+      G4String arg = argv[i];
+      if (arg == "-i" || arg == "--interactive")
+      {
+        interactive = true;
+        continue;
+      }
+      else
+      {
+        macros.push_back(arg);
+      }
     }
+  }
 
-  // Create the run manager (let the RunManagerFactory decide if MT,
-  // sequential or other). The flags from G4RunManagerType are:
-  // Default (default), Serial, MT, Tasking, TBB
-  auto* runManager  =  G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
+  // Construct the run manager
+  auto runManager = G4RunManagerFactory::CreateRunManager();
+  runManager->SetNumberOfThreads(1);  // Or choose appropriate number of threads
+
   runManager->SetVerboseLevel(1);
 
   G4VisManager* visManager = new G4VisExecutive();
   visManager->Initialize();
 
+  DetectorConstruction* theDetector = new DetectorConstruction();
+  runManager->SetUserInitialization(theDetector);
+
   // Register PhysicsList to the RunManager
   runManager->SetUserInitialization(new PhysicsList());
-
-  runManager->SetUserInitialization(new DetectorConstruction());
-  runManager->SetUserInitialization(new ActionInitialization());//PrimaryGeneratorAction is instantiated in ActionInitialization
+  // PrimaryGeneratorAction is instantiated in ActionInitialization
+  runManager->SetUserInitialization(new ActionInitialization());
 
   G4UIExecutive* ui = nullptr;
   if (interactive)
-    {
-      G4cout << "Creating interactive UI session ...";
-      ui = new G4UIExecutive(argc, argv);
-    }
+  {
+    G4cout << "Creating interactive UI session ...";
+    ui = new G4UIExecutive(argc, argv);
+  }
+  
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  UImanager->ApplyCommand("/run/initialize");
 
   for (auto macro : macros)
-    {
-      G4String command = "/control/execute ";
-      UImanager->ApplyCommand(command + macro);
-    }
+  {
+    G4String command = "/control/execute ";
+    UImanager->ApplyCommand(command + macro);
+  }
 
   if (interactive)
+  {
+    if (ui->IsGUI())
     {
-      if (ui->IsGUI())
-	{
-	  UImanager->ApplyCommand("/control/execute macros/ui.mac");
-	}
-      else
-	{
-	  UImanager->ApplyCommand("/run/initialize");
-	}
-      ui->SessionStart();
-      delete ui;
+      UImanager->ApplyCommand("/control/execute macros/ui.mac");
     }
+    else
+    {
+      UImanager->ApplyCommand("/run/initialize");
+    }
+    ui->SessionStart();
+    delete ui;
+  }
 
+  // Reset geometry before deleting run manager to prevent warnings
+  UImanager->ApplyCommand("/run/geometry/reset");
+  
+  // Properly delete run manager to clean up resources
   delete runManager;
 
   G4cout << "Application successfully ended.\nBye :-)" << G4endl;

@@ -1,22 +1,19 @@
 #ifndef RUNACTION_HH
 #define RUNACTION_HH
 #include "G4UserRunAction.hh"
-#include "TFile.h"
-#include "TTree.h"
+
+#include <globals.hh>
 
 class EventAction; // Forward declaration
 
 class RunAction : public G4UserRunAction {
 public:
     RunAction(EventAction* eventAction);
-    virtual ~RunAction();
-    TTree* GetTree(){return tree;};
-    virtual void BeginOfRunAction(const G4Run*) override;
-    virtual void EndOfRunAction(const G4Run*) override;
+    ~RunAction() override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
 private:
-    EventAction* eventAction;
-    TFile* outputFile;
-    TTree* tree;
+    G4bool fNtupleBooked;
 };
 #endif

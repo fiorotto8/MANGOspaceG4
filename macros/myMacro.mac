@@ -1,6 +1,0 @@
-/process/eLoss/StepFunction 0.00001 0.0001 mm
-/control/cout/ignoreThreadsExcept 0
-/control/verbose 2
-/run/verbose 1
-/run/initialize
-/run/beamOn 10

@@ -1,0 +1,14 @@
+/control/verbose 1
+/run/numberOfThreads 1
+/vis/disable
+
+# physics/cuts (set before initialize)
+# fine step limiter for dE/dx and small production cuts
+/process/eLoss/StepFunction 0.0001 0.001 mm
+/run/setCut 1 um
+
+/run/initialize
+
+# fire the events
+/run/verbose 1
+/run/beamOn 10000

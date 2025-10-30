@@ -1,0 +1,6 @@
+.vscode/
+build/
+B3/
+*.root
+*.png
+*.txt

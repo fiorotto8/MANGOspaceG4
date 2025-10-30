@@ -95,3 +95,15 @@ python make_spectrum.py mono --energy 17.4 --counts 1000 --out your_spectrum.txt
 
 Then run your Geant4 app — it will read `your_spectrum.txt` and sample from it.
 
+## Utilities
+
+In analysis/ you can find some ROOT macros:
+
+- checkDigi.py: to check the digitized output
+- ConvertForDigi_withSelection.cpp: to convert the output for digitization with selection on containment 
+  - compile ```g++ -o convert ConvertForDigi_withSelection.cpp `root-config --cflags --libs` -lm```
+  - Usage: ```./convert <input_file.root> <output_basename> <fill_option: 1=check, 0=fill_all>```
+- RecoTrack_faster.C: ROOT macro to reconstruct and get some inf fromt he events
+  - Usage: ```root -l 'RecoTrack.C("output_t0.root")'```
+- splitRootFile.C: ROOT macro to split a big root file into smaller ones
+  - Usage: ```root -l 'splitRootFile.C("bigfile.root")'```

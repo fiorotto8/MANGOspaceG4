@@ -107,3 +107,7 @@ In analysis/ you can find some ROOT macros:
   - Usage: ```root -l 'RecoTrack.C("output_t0.root")'```
 - splitRootFile.C: ROOT macro to split a big root file into smaller ones
   - Usage: ```root -l 'splitRootFile.C("bigfile.root")'```
+
+Notes:
+
+- G4LivermorePolarizedPhotoElectricGDModel is present but not used since the G4EmLivermorePolarizedPhysics is enough to reproduce polarization.

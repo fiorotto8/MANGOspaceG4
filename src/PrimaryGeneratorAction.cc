@@ -36,7 +36,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
   // 2) load your spectrum
   // NOTE: path is relative to run dir
-  LoadSpectrum("../analysis/spectrum.txt");
+  LoadSpectrum("../spectra/55Fe.txt");
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
@@ -55,9 +55,9 @@ void PrimaryGeneratorAction::LoadSpectrum(const G4String& filename)
   if (!fin.is_open()) {
     // Print and abort the job
     G4String msg = "Cannot open spectrum file: " + filename +
-                   "\n- Check the path (it is relative to the run directory)"
-                   "\n- Check permissions"
-                   "\n- Check that the file name is correct";
+                  "\n- Check the path (it is relative to the run directory)"
+                  "\n- Check permissions"
+                  "\n- Check that the file name is correct";
     G4Exception("PrimaryGeneratorAction::LoadSpectrum",
                 "B3_SPECTRUM_FILE_NOT_FOUND",
                 FatalException,
@@ -104,7 +104,7 @@ void PrimaryGeneratorAction::LoadSpectrum(const G4String& filename)
     // spectrum exists but has no counts → this is a configuration problem,
     // but here we just warn and let the run continue.
     G4cerr << "[PrimaryGeneratorAction] WARNING: spectrum " << filename
-           << " has zero total counts; default energy will be used.\n";
+          << " has zero total counts; default energy will be used.\n";
   }
 }
 
@@ -150,7 +150,7 @@ G4double PrimaryGeneratorAction::SampleEnergyFromSpectrum(G4double& outPolMean,
 //   else → (0,0,0)
 // --------------------------------------------------
 G4ThreeVector PrimaryGeneratorAction::SamplePolarizationVector(G4double polMean,
-                                                               G4double polSigma) const
+                                                              G4double polSigma) const
 {
   // draw p from Gaussian
   G4double p = polMean;

@@ -11,4 +11,4 @@
 
 # fire the events
 /run/verbose 1
-/run/beamOn 10000
+/run/beamOn 100000

@@ -55,10 +55,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double gasTemperature = 300*kelvin;
 
   // Fractions (sum to 1.0 in volume/partial pressure sense)
-  G4double He_frac  = 0.0;
+  G4double He_frac  = 0.6;
   G4double CF4_frac = 0.4;
-  G4double Ar_frac  = 0.6;
-  G4double SF6_frac = 0.0;
+  G4double Ar_frac  = 0.;
+  G4double SF6_frac = 0.;
 
   // Reference densities at 1 atm, 300 K for *pure* gas
   // (your numbers were these *times* the fraction already; we separate it)

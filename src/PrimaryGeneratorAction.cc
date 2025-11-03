@@ -36,7 +36,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
   // 2) load your spectrum
   // NOTE: path is relative to run dir
-  LoadSpectrum("../spectra/55Fe.txt");
+  LoadSpectrum("../spectra/Ag.txt");
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()

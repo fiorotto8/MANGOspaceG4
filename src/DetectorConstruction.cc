@@ -25,7 +25,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   //! World (vacuum-like)
   auto* worldMat   = nist->FindOrBuildMaterial("G4_Galactic");
-  auto* solidWorld = new G4Box("World", 30*cm, 30*cm, 30*cm);
+  auto* solidWorld = new G4Box("World", 50*cm, 50*cm, 50*cm);
   auto* logicWorld = new G4LogicalVolume(solidWorld, worldMat, "World");
   auto* physWorld  = new G4PVPlacement(
       nullptr, {}, logicWorld, "World", nullptr, false, 0, fCheckOverlaps);

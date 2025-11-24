@@ -5,7 +5,8 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 # Open the ROOT file
-file_path = "digi_Run00001.root"
+#file_path = "digi_Run00001.root"
+file_path = "histograms_Run00001.root"
 with uproot.open(file_path) as file:
     # Access the eventInfo TTree
     tree = file["event_info"]

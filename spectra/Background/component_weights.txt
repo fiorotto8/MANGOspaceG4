@@ -1,0 +1,11 @@
+#component,integrated_flux[particles cm^-2 s^-1 sr^-1],weight_norm
+CXB,6.95642233e+00,9.71898426e-01
+Neutron_albedo,3.49466069e-03,4.88247416e-04
+Photon_albedo,1.93866905e-01,2.70856097e-02
+Primary_alpha,3.48164139e-05,4.86428459e-06
+Primary_electrons,1.13278508e-06,1.58264117e-07
+Primary_positrons,6.85128299e-08,9.57209157e-09
+Primary_protons,3.60970600e-04,5.04320672e-05
+Secondary_electrons,5.94605348e-04,8.30737374e-05
+Secondary_positrons,2.29956746e-03,3.21278077e-04
+Secondary_proton,4.86006806e-04,6.79011750e-05

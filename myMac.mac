@@ -11,4 +11,10 @@
 
 # fire the events
 /run/verbose 1
+
+/B3/primary/spectrumFile ../spectra/CXB_gamma.txt
+/B3/primary/particle gamma
+/B3/primary/emissionMode sphere
+/B3/primary/sphereRadius 30
+
 /run/beamOn 100000
